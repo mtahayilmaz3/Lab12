@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, Alert } from 'react-native';
+import { useAuth } from '../context/AuthContext'; // useAuth hook'unu çağır
 
 export default function LoginScreen({ navigation }) {
   const [username, setUsername] = useState('');
+  const { login } = useAuth(); // Context'ten login fonksiyonunu al
 
   const handleLogin = () => {
-    // Boşlukları temizle ve boş mu kontrol et
     if (!username.trim()) {
       Alert.alert('Hata', 'Lütfen bir kullanıcı adı girin.');
       return;
     }
-    // Home ekranına username parametresi ile git
-    // .replace kullanıyoruz ki geri butonuna basınca tekrar login'e dönmesin
-    navigation.replace('Home', { username });
+    
+    login(username); // Global state'i güncelle
+    navigation.replace('Home'); // Parametre göndermeden geçiş yap
   };
 
   return (
@@ -30,37 +31,11 @@ export default function LoginScreen({ navigation }) {
     </View>
   );
 }
-
+// ... styles aynı kalacak (eğer silmediysen tekrar kopyalamana gerek yok)
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 20,
-    fontSize: 16,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    padding: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
+  container: { flex: 1, justifyContent: 'center', padding: 20, backgroundColor: '#fff' },
+  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20, textAlign: 'center' },
+  input: { borderWidth: 1, borderColor: '#ddd', padding: 15, borderRadius: 8, marginBottom: 20, fontSize: 16 },
+  button: { backgroundColor: '#007AFF', padding: 15, borderRadius: 8, alignItems: 'center' },
+  buttonText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
 });
